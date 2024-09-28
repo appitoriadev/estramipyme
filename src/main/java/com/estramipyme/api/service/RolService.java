@@ -1,39 +1,67 @@
 package com.estramipyme.api.service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+
 import org.springframework.stereotype.Service;
 
-import com.estramipyme.repositories.models.Rol;
-
+import com.estramipyme.api.dto.RolDto;
+import com.estramipyme.data.models.Rol;
+import com.estramipyme.data.repositories.RolRepository;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class RolService {
-    private final JdbcTemplate jdbcTemplate;
-    // Inyecta JdbcTemplate usando el constructor
-    @Autowired
-    public RolService(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+
+    private final RolRepository _rolRepository;
+
+    public RolService(RolRepository rolRepository) {
+        _rolRepository = rolRepository;
     }
 
-    // Ejemplo de un método para obtener todos los registros de la tabla Rol
-    public List<Rol> getAllRol() {
-        String sql = "SELECT * FROM \"Rol\"";
-        jdbcTemplate.queryForList(sql);
-        List<Rol> roles = jdbcTemplate.query(sql, (rs, rowNum) -> {
-            Rol rol = new Rol();
-            rol.setId(rs.getInt("id"));
-            rol.setNombreRol(rs.getString("nombreRol"));
-            rol.setFechaCreacionRol(rs.getString("fechaCreacionRol"));
-            rol.setActiveRol(rs.getBoolean("isActiveRol"));
-            return rol;
-        });
+    public RolDto findById(Integer id) {
+        var rol = _rolRepository.findById(id);
+        return new RolDto(
+            rol.getId(),
+            rol.getNombreRol(),
+            rol.getFechaCreacionRol(),
+            rol.isActiveRol()
+        );
+    }
+
+    public List<RolDto> findAll() {
+        List<RolDto> roles = new ArrayList();
+        List<Rol> rols = _rolRepository.findAll();
+        for (Rol rol : rols) {
+            roles.add(
+                new RolDto(
+                    rol.getId(),
+                    rol.getNombreRol(),
+                    rol.getFechaCreacionRol(),
+                    rol.isActiveRol()
+                )
+            );
+        }
+
         return roles;
     }
 
-    // Ejemplo de un método para insertar un nuevo Rol
-    public void insertRol(Rol rol) {
-        String sql = "INSERT INTO \"Rol\" (\"nombreRol\", \"fechaCreacionRol\", \"isActiveRol\") VALUES (CURRENT_TIMESTAMP, ?, true)";
-        jdbcTemplate.update(sql, rol.getNombreRol());
+    public void save(RolDto rolDto) {
+        var rol = new Rol();
+        rol.setNombreRol(rolDto.getNombreRol());
+        rol.setActiveRol(true);
+        rol.setFechaCreacionRol(rolDto.getFechaCreacionRol());
+        _rolRepository.save(rol);
+    }
+
+    public void update(RolDto rolDto) {
+        var rol = new Rol();
+        rol.setId(rolDto.getId());
+        rol.setNombreRol(rolDto.getNombreRol());
+        rol.setActiveRol(rolDto.getIsActiveRol());
+        rol.setFechaCreacionRol(rolDto.getFechaCreacionRol());
+        _rolRepository.update(rol);
+    }
+
+    public void delete(Integer id) {
+        _rolRepository.delete(id);
     }
 }

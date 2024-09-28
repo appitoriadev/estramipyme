@@ -21,9 +21,9 @@ public class SwaggerConfig {
 	
 	private OpenApiCustomiser openApiCustomiser() {
 		return openApi -> openApi.info(new Info()
-				.title("Test swagger")
+				.title("Estramipyme swagger")
 				.version("1.0.0")
-				.description("Api test para java"));
+				.description("Estramipyme para java"));
 	}
 	
 }
