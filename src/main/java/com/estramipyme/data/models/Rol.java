@@ -1,4 +1,6 @@
-package com.estramipyme.repositories.models;
+package com.estramipyme.data.models;
+
+import java.util.Date;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,7 +21,7 @@ public class Rol {
     private String nombreRol;
 
     @Column(name = "fechaCreacionRol")
-    private String fechaCreacionRol;
+    private Date fechaCreacionRol;
 
     @Column(name = "isActiveRol")
     private boolean isActiveRol;

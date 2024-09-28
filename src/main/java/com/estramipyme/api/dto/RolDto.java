@@ -1,16 +1,18 @@
 package com.estramipyme.api.dto;
 
+import java.util.Date;
+
 public class RolDto {
     
     private int id;
     private String nombreRol;
-    private String fechaCreacionRol;
+    private Date fechaCreacionRol;
     private Boolean isActiveRol;
 
     public RolDto() {
     }
 
-    public RolDto(int id, String nombreRol, String fechaCreacionRol, Boolean isActiveRol) {
+    public RolDto(int id, String nombreRol, Date fechaCreacionRol, Boolean isActiveRol) {
         this.id = id;
         this.nombreRol = nombreRol;
         this.fechaCreacionRol = fechaCreacionRol;
@@ -25,7 +27,7 @@ public class RolDto {
         return nombreRol;
     }
 
-    public String getFechaCreacionRol() {
+    public Date getFechaCreacionRol() {
         return fechaCreacionRol;
     }
 
@@ -41,11 +43,12 @@ public class RolDto {
         this.nombreRol = nombreRol;
     }
 
-    public void setFechaCreacionRol(String fechaCreacionRol) {
+    public void setFechaCreacionRol(Date fechaCreacionRol) {
         this.fechaCreacionRol = fechaCreacionRol;
     }
 
     public void setIsActiveRol(Boolean isActiveRol) {
         this.isActiveRol = isActiveRol;
     }
+
 }
