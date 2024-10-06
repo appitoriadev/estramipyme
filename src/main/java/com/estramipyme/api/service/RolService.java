@@ -11,14 +11,14 @@ import java.util.List;
 @Service
 public class RolService {
 
-    private final RolRepository _rolRepository;
+    private final RolRepository rolRepository;
 
     public RolService(RolRepository rolRepository) {
-        _rolRepository = rolRepository;
+        this.rolRepository = rolRepository;
     }
 
     public RolDto findById(Integer id) {
-        var rol = _rolRepository.findById(id);
+        var rol = rolRepository.findById(id);
         return new RolDto(
             rol.getId(),
             rol.getNombreRol(),
@@ -28,8 +28,8 @@ public class RolService {
     }
 
     public List<RolDto> findAll() {
-        List<RolDto> roles = new ArrayList();
-        List<Rol> rols = _rolRepository.findAll();
+        List<RolDto> roles = new ArrayList<>();
+        List<Rol> rols = rolRepository.findAll();
         for (Rol rol : rols) {
             roles.add(
                 new RolDto(
@@ -49,7 +49,7 @@ public class RolService {
         rol.setNombreRol(rolDto.getNombreRol());
         rol.setActiveRol(true);
         rol.setFechaCreacionRol(rolDto.getFechaCreacionRol());
-        _rolRepository.save(rol);
+        rolRepository.save(rol);
     }
 
     public void update(RolDto rolDto) {
@@ -58,10 +58,10 @@ public class RolService {
         rol.setNombreRol(rolDto.getNombreRol());
         rol.setActiveRol(rolDto.getIsActiveRol());
         rol.setFechaCreacionRol(rolDto.getFechaCreacionRol());
-        _rolRepository.update(rol);
+        rolRepository.update(rol);
     }
 
     public void delete(Integer id) {
-        _rolRepository.delete(id);
+        rolRepository.delete(id);
     }
 }
