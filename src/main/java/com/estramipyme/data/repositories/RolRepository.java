@@ -11,24 +11,24 @@ import com.estramipyme.data.models.Rol;
 @Repository
 public class RolRepository implements IRepository<Rol,Integer> {
 
-    private final JdbcTemplate _jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
     
     public RolRepository(JdbcTemplate jdbcTemplate) {
-        this._jdbcTemplate = jdbcTemplate;   
+        this.jdbcTemplate = jdbcTemplate;   
     }
     
     public Rol findById(Integer id) {
         try {
-            return _jdbcTemplate.queryForObject("SELECT * FROM Rol WHERE id = ?", (rs,rowNum)->{
-                Rol rol = new Rol();
-                rol.setId(rs.getInt("id"));
-                rol.setNombreRol(rs.getString("nombreRol"));
-                rol.setFechaCreacionRol(rs.getDate("fechaCreacionRol"));
-                rol.setActiveRol(rs.getBoolean("isActiveRol"));
-                return rol;
+            return jdbcTemplate.queryForObject("SELECT * FROM \"Rol\" WHERE id = ?", (rs,rowNum)->{
+                Rol Rol = new Rol();
+                Rol.setId(rs.getInt("id"));
+                Rol.setNombreRol(rs.getString("nombreRol"));
+                Rol.setFechaCreacionRol(rs.getDate("fechaCreacionRol"));
+                Rol.setActiveRol(rs.getBoolean("isActiveRol"));
+                return Rol;
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             throw e;
         }
     }
@@ -36,16 +36,16 @@ public class RolRepository implements IRepository<Rol,Integer> {
     
     public List<Rol> findAll() {
         try {
-            return _jdbcTemplate.query("SELECT * FROM Rol", (rs,rowNum)->{
-                Rol rol = new Rol();
-                rol.setId(rs.getInt("id"));
-                rol.setNombreRol(rs.getString("nombreRol"));
-                rol.setFechaCreacionRol(rs.getDate("fechaCreacionRol"));
-                rol.setActiveRol(rs.getBoolean("isActiveRol"));
+            return jdbcTemplate.query("SELECT * FROM \"Rol\"", (rs,rowNum)->{
+               Rol rol = new Rol();
+               rol.setId(rs.getInt("id"));
+               rol.setNombreRol(rs.getString("nombreRol"));
+               rol.setFechaCreacionRol(rs.getDate("fechaCreacionRol"));
+               rol.setActiveRol(rs.getBoolean("isActiveRol"));
                 return rol;
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             throw e;
         }
     }
@@ -53,9 +53,9 @@ public class RolRepository implements IRepository<Rol,Integer> {
     
     public void save(Rol entity) {
         try {
-            _jdbcTemplate.update("INSERT INTO \"Rol\" (\"nombreRol\", \"fechaCreacionRol\", \"isActiveRol\") VALUES (?, CURRENT_TIMESTAMP, '1')", entity.getNombreRol());
+            jdbcTemplate.update("INSERT INTO \"Rol\" (\"nombreRol\", \"fechaCreacionRol\", \"isActiveRol\") VALUES (?, CURRENT_TIMESTAMP, '1')", entity.getNombreRol());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             throw e;
         }
     }
@@ -63,10 +63,13 @@ public class RolRepository implements IRepository<Rol,Integer> {
     
     public void update(Rol entity) {
 
+        var isActiveRol = entity.isActiveRol() ? "1" : "0";
+        var sql = "UPDATE \"Rol\" SET \"nombreRol\" = '" + entity.getNombreRol() + "', \"isActiveRol\" = '" + isActiveRol + "' WHERE \"id\" = " + entity.getId();
+        System.out.println("SQL: " + sql);
         try {
-            _jdbcTemplate.update("UPDATE Rol SET \"nombreRol\" = ?, \"isActiveRol\" = ? WHERE \"id\" = ? ", entity.getNombreRol(), entity.isActiveRol(), entity.getId());
+            jdbcTemplate.update(sql);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             throw e;
         }
     }
@@ -74,9 +77,9 @@ public class RolRepository implements IRepository<Rol,Integer> {
     
     public void delete(Integer id) {
         try {
-            _jdbcTemplate.update("DELETE FROM Rol WHERE id = ?", id);
+            jdbcTemplate.update("DELETE FROM \"Rol\" WHERE id = ?", id);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             throw e;
         }
     }

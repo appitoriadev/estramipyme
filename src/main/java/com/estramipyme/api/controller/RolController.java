@@ -1,6 +1,5 @@
 package com.estramipyme.api.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,43 +12,46 @@ import com.estramipyme.api.service.RolService;
 import com.estramipyme.api.dto.RolDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 @RestController
 @RequestMapping("/api/rol")
 public class RolController {
-
-    private final RolService _rolService;
+	
+    private final RolService rolService;
 
 	//Constructor de nuestro controlador
     public RolController(RolService rolService) {
-        this._rolService = rolService;
+        this.rolService = rolService;
     }
 
     @GetMapping("/")
 	@Operation(summary="Obtener Rol", description="Usado para obtener Rol")
 	public List<RolDto> getAllRoll() {
 
-		List<RolDto> roles = new ArrayList();
-		roles = _rolService.findAll();
-		return roles;
+		return rolService.findAll();
 	}
 
 	@GetMapping("/{id}")
 	@Operation(summary="Obtener Rol por ID", description="Usado para obtener Rol por ID")
 	public RolDto getRol(@Parameter(description = "Id del usuario", required = true)@PathVariable Integer id) {
-		var rol = _rolService.findById(id);
-		return rol;
+
+		return rolService.findById(id);
 	}
 	
+	@PutMapping("/{id}")
+	public RolDto updateRol(@PathVariable Integer id, @RequestBody RolDto entity) {
+		entity.setId(id);
+		rolService.update(entity);
+		return entity;
+	}
 	
-	@PostMapping()
+	@PostMapping("/")
 	@Operation(summary="Crea rol", description="Usado para crear un rol")
-	public void createUser(@RequestBody RolDto rolDto)
-	////(@RequestBody(description="Crear Usuario", required=true))
+	public void createRol(@RequestBody RolDto rolDto)
 	{
-		//// llamr servicio para crear su rol a través de los DTO
-		_rolService.save(rolDto);
-		// return rolDto;
+		rolService.save(rolDto);
 	}
 }
